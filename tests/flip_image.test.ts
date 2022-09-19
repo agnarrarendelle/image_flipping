@@ -18,3 +18,18 @@ describe("test image url", () => {
     expect(result).toBe(false);
   });
 });
+
+describe("test image name", () => {
+  test("valid image name", async () => {
+    const result = isImageNameValid("valid-name")
+    expect(result).toBe(true);
+  });
+  test("valid image name-empty", async () => {
+    const result = isImageNameValid(" ")
+    expect(result).toBe(false);
+  });
+  test("valid image name-contains space", async () => {
+    const result = isImageNameValid("valid name")
+    expect(result).toBe(false);
+  });
+});
