@@ -2,18 +2,9 @@ import Jimp from "jimp";
 import promptSync from "prompt-sync";
 import axios from "axios";
 import fs from "fs";
+import { isImageNameValid, isImageUrlValid } from "./check_image";
 const prompt = promptSync({ sigint: true });
 const outputDir = "output";
-const isImageUrlValid = (imageUrl: string) => {
-  return axios
-    .get(imageUrl)
-    .then((x) => true)
-    .catch((x) => false);
-};
-
-const isImageNameValid = (name:string)=>{
-    return name.trim().length != 0
-}
 
 (async () => {
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
@@ -26,7 +17,7 @@ const isImageNameValid = (name:string)=>{
     }
 
     const imgName = prompt("Please Enter Name of Image:");
-    if (isImageNameValid(imgName)) {
+    if (!isImageNameValid(imgName)) {
       console.log("please enter a image name");
       continue;
     }
