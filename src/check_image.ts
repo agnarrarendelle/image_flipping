@@ -7,7 +7,6 @@ export const isImageUrlValid = (imageUrl: string) => {
 };
 
 export const isImageNameValid = (name: string) => {
-  return name.trim().length != 0;
+  const trimmedName = name.trim();
+  return trimmedName.length != 0 && !trimmedName.includes(" ");
 };
-
-
