@@ -22,7 +22,10 @@ const isImageValid = (imageUrl: string) => {
     }
 
     const imgName = prompt("Please Enter Name of Image:");
-    
+    if (imgName.trim().length === 0) {
+      console.log("please enter a image name");
+      continue;
+    }
 
     const image = await Jimp.read(imgUrl);
     try {
