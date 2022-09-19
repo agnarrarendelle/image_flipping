@@ -21,7 +21,7 @@ const outputDir = "output";
       console.log("please enter a image name");
       continue;
     }
-
+ 
     const image = await Jimp.read(imgUrl);
     try {
       const flippedImage = await image.flip(true, true);
