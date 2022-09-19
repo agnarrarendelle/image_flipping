@@ -1,8 +1,9 @@
 import Jimp from "jimp";
 import promptSync from "prompt-sync";
 import axios from "axios";
+import fs from "fs";
 const prompt = promptSync({ sigint: true });
-
+const outputDir = "output";
 const isImageValid = (imageUrl: string) => {
   return axios
     .get(imageUrl)
@@ -19,7 +20,7 @@ const isImageValid = (imageUrl: string) => {
   //     process.exit(1);
   //   }
   //   console.log("done");
-
+  if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
   while (true) {
     const imgUrl = prompt("Please Enter Image Url:");
     const imgName = prompt("Please Enter Name of Image:");
@@ -30,9 +31,5 @@ const isImageValid = (imageUrl: string) => {
     }
 
     const image = await Jimp.read(imgUrl);
-    try {
-      const flippedImage = await image.flip(true, true);
-      await flippedImage.write(`${imgName}`);
-    } catch (e) {}
-  }
+    
 })();
