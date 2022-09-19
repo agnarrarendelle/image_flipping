@@ -4,25 +4,29 @@ import axios from "axios";
 import fs from "fs";
 const prompt = promptSync({ sigint: true });
 const outputDir = "output";
-const isImageValid = (imageUrl: string) => {
+const isImageUrlValid = (imageUrl: string) => {
   return axios
     .get(imageUrl)
     .then((x) => true)
     .catch((x) => false);
 };
 
+const isImageNameValid = (name:string)=>{
+    return name.trim().length != 0
+}
+
 (async () => {
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
   while (true) {
     const imgUrl = prompt("Please Enter Image Url:");
-    const imageValid = await isImageValid(imgUrl);
+    const imageValid = await isImageUrlValid(imgUrl);
     if (!imageValid) {
       console.log("please enter a valid image url");
       continue;
     }
 
     const imgName = prompt("Please Enter Name of Image:");
-    if (imgName.trim().length === 0) {
+    if (isImageNameValid(imgName)) {
       console.log("please enter a image name");
       continue;
     }
