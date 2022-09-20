@@ -1,5 +1,5 @@
 # Image Flipping 
-
+A program that receives an image URL and flips it
 ## Required Software
 - NodeJs
 - TypeScript
