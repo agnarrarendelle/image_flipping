@@ -1,6 +1,6 @@
 import { isImageNameValid, isImageUrlValid } from "../src/check_image";
-import { downLoadImage } from "../src/process_image";
-
+import * as processImage from "../src/process_image";
+import fs from "fs";
 describe("test image url", () => {
   test("valid image url", async () => {
     const result = await isImageUrlValid(
@@ -22,30 +22,42 @@ describe("test image url", () => {
 
 describe("test image name", () => {
   test("valid image name", async () => {
-    const result = isImageNameValid("valid-name")
+    const result = isImageNameValid("valid-name");
     expect(result).toBe(true);
   });
   test("valid image name-empty", async () => {
-    const result = isImageNameValid(" ")
+    const result = isImageNameValid(" ");
     expect(result).toBe(false);
   });
   test("valid image name-contains space", async () => {
-    const result = isImageNameValid("valid name")
+    const result = isImageNameValid("valid name");
     expect(result).toBe(false);
   });
 });
 
-describe("test download image",()=>{
-    test("valid url",async()=>{
-        const res = await downLoadImage("https://image.shutterstock.com/image-illustration/1234-option-colored-icons-letter-260nw-2159110883.jpg")
-        expect(res).toBeDefined();
-    })
-    test("invalid url-empty",async()=>{
-        const res = await downLoadImage("  ")
-        expect(res).not.toBeDefined();
-    })
-    test("invalid url-nonexist",async()=>{
-        const res = await downLoadImage("https://someimage.jpg")
-        expect(res).not.toBeDefined();
-    })
-})
+describe("test download image", () => {
+  test("valid url", async () => {
+    const res = await processImage.downLoadImage(
+      "https://image.shutterstock.com/image-illustration/1234-option-colored-icons-letter-260nw-2159110883.jpg"
+    );
+    expect(res).toBeDefined();
+  });
+  test("invalid url-empty", async () => {
+    const res = await processImage.downLoadImage("  ");
+    expect(res).not.toBeDefined();
+  });
+  test("invalid url-nonexist", async () => {
+    const res = await processImage.downLoadImage("https://someimage.jpg");
+    expect(res).not.toBeDefined();
+  });
+});
+
+describe("test write out image", () => {
+  test("valid image", async () => {
+    const res = await processImage.downLoadImage(
+      "https://image.shutterstock.com/image-illustration/1234-option-colored-icons-letter-260nw-2159110883.jpg"
+    );
+    await processImage.writeToOutput(res!, `${processImage.outputDir}/output`);
+    expect(fs.existsSync(`${processImage.outputDir}/output`)).toBe(true);
+  });
+});

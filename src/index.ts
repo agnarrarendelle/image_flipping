@@ -1,13 +1,13 @@
-import Jimp from "jimp";
 import promptSync from "prompt-sync";
-import axios from "axios";
 import fs from "fs";
 import { isImageNameValid, isImageUrlValid } from "./check_image";
+import { downLoadImage, writeToOutput } from "./process_image";
 const prompt = promptSync({ sigint: true });
 const outputDir = "output";
 
 (async () => {
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const imgUrl = prompt("Please Enter Image Url:");
     const imageValid = await isImageUrlValid(imgUrl);
@@ -21,13 +21,12 @@ const outputDir = "output";
       console.log("please enter a image name");
       continue;
     }
- 
-    const image = await Jimp.read(imgUrl);
+
+    const image = await downLoadImage(imgUrl);
     try {
-      const flippedImage = await image.flip(true, true);
-      await flippedImage.writeAsync(`${outputDir}/${imgName}.png`);
+      await writeToOutput(image!, `${outputDir}/${imgName}.png`);
     } catch (e) {
-      console.log("Cannot process your image. Please try again");
+      console.log(`${e}. Please try again`);
       continue;
     }
   }
